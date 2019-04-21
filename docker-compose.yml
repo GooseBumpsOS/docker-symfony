@@ -6,7 +6,7 @@ services:
             - ./src:/var/www/html
             - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
         depends_on:
-            - mysql
+            - mariadb
     apache:
         image: httpd:2.4
         ports:
@@ -16,25 +16,24 @@ services:
             - ./httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
         depends_on:
             - php
-services:
-  mariadb:
-    image: mariadb:10.3
-    restart: always
-    volumes:
-      - ./mariadb:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: qwerty
+    mariadb:
+        image: mariadb:10.3
+        restart: always
+        volumes:
+         - ./mariadb:/var/lib/mysql
+        environment:
+         MYSQL_ROOT_PASSWORD: qwerty
       #MYSQL_USER: myUser
       # MYSQL_PASSWORD: myUser
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    links: 
-      - mariadb:db
-    ports:
-      - 8000:80
-    environment:
-      MYSQL_ROOT_PASSWORD: qwerty
-    depends_on:
-      - mariadb
+    phpmyadmin:
+       image: phpmyadmin/phpmyadmin
+       links: 
+        - mariadb:db
+       ports:
+        - 8000:80
+       environment:
+        MYSQL_ROOT_PASSWORD: qwerty
+       depends_on:
+        - mariadb
 
